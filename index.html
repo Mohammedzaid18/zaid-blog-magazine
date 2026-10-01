@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mohammed Zaid Waghoo | Notes on building AI and the web</title>
+<meta name="description" content="A digital magazine of notes on building AI systems and web software, by Mohammed Zaid Waghoo in Mumbai.">
+<meta property="og:title" content="Mohammed Zaid Waghoo: notes on building AI and the web">
+<meta property="og:description" content="A digital magazine by Mohammed Zaid Waghoo in Mumbai.">
+<meta property="og:image" content="images/hero.jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%232036E8'/><text x='50' y='70' font-size='62' font-family='Arial' font-weight='800' text-anchor='middle' fill='%23FFB000'>Z</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FFFFFF;
+  --ink:#0C1530;
+  --slate:#535F76;
+  --line:#E1E5EB;
+  --accent:#2036E8;
+  --cobalt:#2036E8;
+  --marigold:#FFB000;
+  --deep:#0C1530;
+  --coral:#FF6B4A;
+  --mint:#19C69B;
+  --violet:#7B61FF;
+  --sky:#EEF3FF;
+  --blush:#FFF1EA;
+  --lemon:#FFF8E1;
+  --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+  --text:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --pad:clamp(1.25rem,5vw,4rem);
+  --heavy:.014em;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:calc(4rem + env(safe-area-inset-top,0px));scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:#fff;color:var(--ink);font-family:var(--text);font-size:1.125rem;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+img{max-width:100%;display:block}
+:focus-visible{outline:3px solid var(--marigold);outline-offset:3px}
+.wrap{max-width:76rem;margin:0 auto;padding:0 var(--pad)}
+button{font:inherit;color:inherit;cursor:pointer}
+
+/* ---------- cover ---------- */
+.cover{position:relative;background:var(--cobalt);color:#fff;overflow:hidden;min-height:max(100svh,44rem);display:flex;flex-direction:column;padding:0 var(--pad) 0}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1.1rem 0;font-family:var(--display);font-size:1rem;font-weight:500;position:relative;z-index:5}
+.topbar nav{display:flex;gap:1.4rem;flex-wrap:wrap;justify-content:flex-end}
+.topbar a{text-decoration:none;border-bottom:2px solid transparent;padding:.15rem 0}
+.topbar a:hover{border-color:var(--marigold)}
+.masthead{position:relative;z-index:2;margin:clamp(1rem,3.5vh,2.5rem) 0 0;text-align:center;white-space:nowrap;font-family:var(--display);font-weight:800;font-stretch:75%;font-variation-settings:"wdth" 75;font-size:clamp(3.6rem,17.5vw,16.5rem);line-height:.86;letter-spacing:-.02em}
+.cutout{position:absolute;z-index:3;bottom:0;left:50%;transform:translateX(-50%);height:76%;width:auto;pointer-events:none}
+.lines{position:absolute;z-index:4;top:46%;width:min(23vw,21rem);display:grid;gap:1.6rem}
+.lines.l{left:var(--pad)}
+.lines.r{right:var(--pad)}
+.dek{font-family:var(--display);font-size:1.05rem;line-height:1.45;margin:0;max-width:17rem;opacity:.92}
+.line{text-decoration:none;display:block}
+.line .k{display:block;font-family:var(--display);font-weight:600;font-size:.95rem;color:var(--marigold);margin-bottom:.15rem}
+.line .t{display:inline;font-family:var(--display);font-weight:800;-webkit-text-stroke:.015em currentColor;font-size:clamp(1.15rem,1.9vw,1.6rem);line-height:1.15;background:linear-gradient(var(--marigold),var(--marigold)) 0 100%/0 .14em no-repeat;transition:background-size .25s}
+.line:hover .t,.line:focus-visible .t{background-size:100% .14em}
+.sticker{position:absolute;z-index:5;left:calc(50% + min(10.5vw,9.5rem));bottom:14%;width:7.4rem;height:7.4rem;border-radius:50%;background:var(--marigold);color:var(--deep);display:grid;place-items:center;text-align:center;font-family:var(--display);font-weight:800;font-size:1.05rem;line-height:1.05;transform:rotate(-11deg);padding:.6rem}
+.sticker b{display:block;font-size:2rem;line-height:.95}
+
+@media (max-width:40rem){.topbar>span:first-child{display:none}.topbar{justify-content:center}.topbar nav{justify-content:center;gap:1.1rem}}
+@media (max-width:60rem){
+  .cover{min-height:0;padding-bottom:0}
+  .masthead span{display:block;width:max-content;margin:0 auto}
+  .cutout{position:relative;left:auto;transform:none;height:26rem;margin:.4rem auto 0;z-index:3}
+  .lines{position:static;width:auto;z-index:4}
+  .lines.l{order:3;background:var(--deep);margin:0 calc(-1 * var(--pad));padding:1.8rem var(--pad) .5rem}
+  .lines.r{order:4;background:var(--deep);margin:0 calc(-1 * var(--pad));padding:.5rem var(--pad) 2rem}
+  .sticker{display:none}
+}
+
+/* ---------- sections ---------- */
+.block{padding-top:clamp(3rem,7vw,5.5rem);padding-bottom:clamp(3rem,7vw,5.5rem)}
+h2.sec{font-family:var(--display);font-weight:800;-webkit-text-stroke:var(--heavy) currentColor;font-size:clamp(2.4rem,6vw,4.4rem);letter-spacing:-.022em;line-height:1;margin:0 0 .6rem}
+.sec-lede{color:var(--slate);margin:0 0 2.2rem;max-width:36rem}
+
+/* story tiles */
+.mag{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:1.25rem}
+.tile{display:flex;flex-direction:column;justify-content:space-between;text-decoration:none;padding:clamp(1.25rem,2.4vw,2rem);min-height:17rem;grid-column:span 5;position:relative}
+.tile:first-child{grid-column:span 7;grid-row:span 2;min-height:36rem}
+.tile .k{font-family:var(--display);font-weight:600;font-size:1rem;opacity:.85}
+.tile h3{font-family:var(--display);font-weight:800;-webkit-text-stroke:var(--heavy) currentColor;font-stretch:85%;font-variation-settings:"wdth" 85;line-height:1;letter-spacing:-.02em;font-size:clamp(1.9rem,3.4vw,2.9rem);margin:1.5rem 0 1rem;max-width:30rem}
+.tile:first-child h3{font-size:clamp(2.6rem,6vw,5.2rem)}
+.tile h3 span{background:linear-gradient(currentColor,currentColor) 0 100%/0 .08em no-repeat;transition:background-size .25s}
+.tile:hover h3 span,.tile:focus-visible h3 span{background-size:100% .08em}
+.tile p{margin:0 0 1.2rem;font-size:1.02rem;line-height:1.5;max-width:30rem;opacity:.92}
+.tile .m{font-family:var(--display);font-size:.95rem;opacity:.85}
+@media (max-width:52rem){.tile,.tile:first-child{grid-column:1/-1;grid-row:auto;min-height:15rem}.tile:first-child{min-height:24rem}}
+
+/* photo album */
+.album{display:flex;gap:1.25rem;align-items:stretch}
+.acol{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:1.25rem}
+.acol>*:last-child{flex:1 1 auto}
+.acol>.ph:last-child{display:flex;align-items:flex-start;background:#0C1530;padding-bottom:4.6rem}
+.acol>.ph:last-child::after{display:none}
+.acol>.ph:last-child .cap{color:#fff}
+.acol>.ph{width:100%}
+.ph{position:relative;display:block;padding:0;border:0;background:#E9EDF3;overflow:hidden;text-align:left;color:#fff}
+.ph img{width:100%;height:auto;display:block;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.ph:hover img,.ph:focus-visible img{transform:scale(1.045)}
+.ph::after{content:"";position:absolute;inset:auto 0 0 0;height:55%;background:linear-gradient(to top,rgba(8,14,32,.82),rgba(8,14,32,0));pointer-events:none}
+.ph .cap{position:absolute;left:1.1rem;right:1.1rem;bottom:1rem;z-index:2;font-family:var(--display);line-height:1.2}
+.ph .cap b{display:block;font-weight:800;font-size:1.25rem;-webkit-text-stroke:.015em currentColor}
+.ph .cap span{display:block;font-size:.92rem;opacity:.9;margin-top:.2rem}
+.ph .zoom{position:absolute;top:.9rem;right:.9rem;z-index:2;width:2.3rem;height:2.3rem;border-radius:50%;background:#fff;color:var(--deep);display:grid;place-items:center;font-size:1.1rem;line-height:1;opacity:0;transition:opacity .2s}
+.ph:hover .zoom,.ph:focus-visible .zoom{opacity:1}
+.album .panel{background:var(--deep);color:#fff;padding:clamp(1.2rem,2vw,1.8rem);min-width:0;min-height:16rem;display:flex;flex-direction:column;justify-content:space-between}
+.panel h3{font-family:var(--display);font-weight:800;-webkit-text-stroke:var(--heavy) currentColor;font-stretch:85%;font-variation-settings:"wdth" 85;font-size:clamp(1.55rem,2.2vw,2.1rem);line-height:1;letter-spacing:-.02em;margin:0;overflow-wrap:break-word}
+.panel h3 em{font-style:normal;color:var(--marigold)}
+.panel p{margin:1rem 0 0;font-family:var(--display);font-size:1rem;color:#C3CCE0}
+@media (max-width:52rem){
+  .album,.acol{gap:.75rem}
+  .ph .zoom{opacity:1}
+}
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:100;background:rgba(6,10,24,.985);color:#fff;display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:max(1rem,env(safe-area-inset-top,0px)) 1rem max(1rem,env(safe-area-inset-bottom,0px));font-family:var(--display)}
+.lb-top{display:flex;justify-content:space-between;align-items:center;font-size:1rem}
+.lb button{background:none;border:2px solid #fff;color:#fff;border-radius:50%;width:2.9rem;height:2.9rem;font-size:1.25rem;line-height:1;display:grid;place-items:center}
+.lb button:hover{background:var(--marigold);border-color:var(--marigold);color:var(--deep)}
+.lb-stage{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:1rem;min-height:0}
+.lb-stage img{max-width:100%;max-height:100%;margin:auto;object-fit:contain;min-height:0;height:100%;width:100%}
+.lb-cap{text-align:center;padding-top:.8rem}
+.lb-cap b{font-weight:800;font-size:1.3rem;display:block}
+.lb-cap span{color:#C3CCE0;font-size:1rem}
+.lb-info{max-width:44rem;margin:.6rem auto 0;color:#D6DDEC;font-size:1rem;line-height:1.5}
+.lb-go{display:inline-block;margin-top:.5rem;color:var(--marigold);font-weight:800}
+@media (max-width:40rem){.lb-stage{grid-template-columns:minmax(0,1fr)}.lb-stage>button{display:none}.lb-nav-m{display:flex !important}}
+.lb-nav-m{display:none;justify-content:center;gap:1rem;padding-top:.8rem}
+
+/* about */
+.about{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(2rem,6vw,5rem);align-items:start}
+.arch{width:min(100%,19rem);aspect-ratio:3/4;object-fit:cover;border-radius:999px 999px 0 0;background:var(--marigold)}
+.about p{margin:0 0 1.1rem;max-width:36rem}
+.timeline{list-style:none;margin:2.2rem 0 0;padding:0 0 0 1.4rem;border-left:3px solid var(--ink)}
+.timeline li{position:relative;padding:0 0 1.5rem}
+.timeline li::before{content:"";position:absolute;left:calc(-1.4rem - 8px);top:.5rem;width:13px;height:13px;background:var(--marigold);border:3px solid var(--ink);border-radius:50%}
+.timeline .when{font-family:var(--display);font-size:.95rem;color:var(--slate);display:block}
+.timeline .what{font-family:var(--display);font-weight:800;font-size:1.15rem;line-height:1.3;display:block}
+.timeline .where{font-size:1rem;color:var(--slate)}
+@media (max-width:52rem){.about{grid-template-columns:1fr}}
+
+/* contact */
+.contact{background:var(--deep);color:#fff}
+.contact .sec-lede{color:#B8C2D8}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));border-top:2px solid var(--marigold)}
+.links a{font-family:var(--display);font-weight:800;font-size:1.45rem;text-decoration:none;padding:1.2rem 1rem 1.2rem 0;border-bottom:1px solid #2A3658;display:flex;flex-direction:column}
+.links a small{font-weight:400;color:#B8C2D8;font-size:.95rem}
+.links a:hover{color:var(--marigold)}
+footer.foot{padding:1.6rem 0 2.4rem;font-family:var(--display);font-size:.95rem;color:var(--slate)}
+.contact-wrap{padding-top:clamp(3rem,7vw,5rem);padding-bottom:clamp(3rem,7vw,5rem)}
+
+
+/* tiles for 8 stories */
+.mag .tile:nth-child(n+4){grid-column:span 4;min-height:15rem}
+.mag .tile:nth-child(n+7){grid-column:span 6}
+@media (max-width:52rem){.mag .tile:nth-child(n+4){grid-column:1/-1}}
+
+/* project index */
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1.6rem}
+.chip{font-family:var(--display);font-weight:800;font-size:1rem;padding:.5rem 1rem;border:2px solid var(--ink);background:#fff;color:var(--ink)}
+.chip:hover{background:var(--marigold);border-color:var(--marigold);color:#0C1530}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.work{border-top:3px solid var(--ink)}
+.work details{border-bottom:1px solid var(--line)}
+.work summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) 9rem 2rem;gap:1rem;align-items:baseline;padding:1.2rem 0}
+.work summary::-webkit-details-marker{display:none}
+.work summary h3{margin:0;justify-self:start;font-family:var(--display);font-weight:800;-webkit-text-stroke:var(--heavy) currentColor;font-size:clamp(1.5rem,3.2vw,2.5rem);line-height:1;letter-spacing:-.025em}
+.work summary .cat{font-family:var(--display);color:var(--slate);font-size:1rem}
+.work summary .pm{font-family:var(--display);font-weight:800;font-size:1.6rem;text-align:right;transition:transform .2s}
+.work details[open] .pm{transform:rotate(45deg)}
+.work summary h3{background:linear-gradient(var(--marigold),var(--marigold)) 0 92%/0 .14em no-repeat;transition:background-size .25s}.work summary:hover h3,.work summary:focus-visible h3{background-size:100% .14em}
+.work .more-in{padding:0 0 1.6rem;max-width:44rem}
+.work .more-in p{margin:0 0 .8rem}
+.work .stack{font-family:var(--display);font-size:.95rem;color:var(--slate)}
+.work .go{font-family:var(--display);font-weight:800;text-decoration:none;border-bottom:3px solid var(--marigold);display:inline-block;margin-top:.4rem}
+.work .go:hover{background:var(--marigold)}
+@media (max-width:40rem){.work summary{grid-template-columns:minmax(0,1fr) 2rem}.work summary .cat{display:none}}
+
+/* article widgets */
+.tool{border:3px solid var(--ink);padding:1.4rem 1.5rem;margin:2rem 0;font-family:var(--display)}
+.tool h3{margin:0 0 .3rem;font-size:1.35rem;font-weight:800}
+.tool p.sub{margin:0 0 1rem;color:var(--slate);font-size:1rem}
+.donors{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin:1.2rem 0 1rem}
+.donor{font-weight:800;font-size:1.3rem;text-align:center;padding:.9rem 0;border:2px solid var(--line);color:#B4BCC9;transition:background .2s,color .2s,border-color .2s}
+.donor.yes{background:var(--marigold);border-color:var(--marigold);color:#0C1530}
+.tool .res{margin:0;padding:.9rem 1rem;background:var(--deep);color:#fff;font-size:1.05rem;line-height:1.4}
+.tool .res .big{display:block;font-weight:800;font-size:clamp(2.2rem,7vw,3.4rem);line-height:1;color:var(--marigold);-webkit-text-stroke:.02em currentColor}
+.ach{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
+.ach li{display:grid;grid-template-columns:3.4rem minmax(0,1fr) auto;gap:.3rem 1rem;padding:.8rem 0;border-bottom:1px solid var(--line);align-items:baseline;font-family:var(--display)}
+.ach .yr{color:var(--slate);font-size:.95rem}
+.ach b{font-weight:800;font-size:1.08rem;line-height:1.25;display:block}
+.ach small{color:var(--slate);font-size:.92rem}
+.ach .r{font-weight:800;font-size:.95rem;text-align:right}
+.ach a{color:var(--accent);font-size:.9rem;margin-left:.4rem}
+.note{font-size:.95rem;color:var(--slate);font-style:italic}
+@media (max-width:40rem){.ach li{grid-template-columns:2.8rem minmax(0,1fr)}.ach .r{grid-column:2;text-align:left}}
+
+
+/* extra styling */
+::selection{background:var(--marigold);color:#0C1530}
+.sub-h{font-family:var(--display);font-weight:800;-webkit-text-stroke:var(--heavy) currentColor;font-size:clamp(1.8rem,3.6vw,2.6rem);letter-spacing:-.025em;line-height:1;margin:clamp(2.5rem,5vw,4rem) 0 .6rem}
+.stick{position:fixed;top:0;left:0;right:0;z-index:40;background:#fff;border-bottom:3px solid var(--ink);display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.65rem var(--pad);padding-top:calc(.65rem + env(safe-area-inset-top,0px));font-family:var(--display);transform:translateY(-105%);transition:transform .25s}
+.stick.on{transform:none}
+.stick .mark{font-weight:800;text-decoration:none;font-size:1.15rem;-webkit-text-stroke:.02em currentColor}
+.stick nav{display:flex;flex-wrap:wrap;justify-content:center;gap:.2rem 1.1rem;font-weight:600;font-size:1rem}@media (max-width:26rem){.stick nav{gap:.2rem .8rem;font-size:.92rem}}
+.stick nav a{text-decoration:none;border-bottom:2px solid transparent}
+.stick nav a:hover{border-color:var(--marigold)}
+@media (max-width:40rem){.stick .mark{display:none}.stick{justify-content:center}}
+.tile::after{content:"\2197";position:absolute;top:1.1rem;right:1.4rem;font-family:var(--display);font-weight:800;font-size:1.7rem;line-height:1;transition:transform .25s}
+.tile:hover::after,.tile:focus-visible::after{transform:translate(5px,-5px)}
+.wordmark{font-family:var(--display);font-weight:800;font-stretch:88%;font-variation-settings:"wdth" 88;color:var(--marigold);font-size:clamp(2.4rem,8.2vw,8.5rem);line-height:.95;letter-spacing:-.015em;margin:clamp(2.5rem,6vw,4.5rem) 0 0}
+.fig{width:min(60rem,94vw);margin:2.5rem 0 2.5rem calc(50% - min(30rem,47vw))}
+.fig img{width:100%;height:auto}
+.fig.tall{width:min(21rem,86vw);margin:2rem 0 2rem calc(50% - min(10.5rem,43vw))}
+.fig figcaption{font-family:var(--display);font-size:.95rem;color:var(--slate);padding-top:.6rem}
+.copy{background:none;border:0;padding:0;font-family:var(--display);font-weight:800;font-size:inherit;color:inherit;border-bottom:2px solid currentColor;cursor:pointer}
+.copy:hover{opacity:.75}
+
+/* skills marquee */
+.ribbon{background:var(--marigold);color:#0C1530;overflow:hidden;border-top:4px solid var(--deep);border-bottom:4px solid var(--deep)}
+.rtrack{display:flex;width:max-content;animation:mq 38s linear infinite}
+.ribbon:hover .rtrack{animation-play-state:paused}
+.rset{display:flex;flex:none;align-items:center}
+.ri{display:flex;align-items:center;white-space:nowrap;font-family:var(--display);font-weight:800;font-size:clamp(1.35rem,3vw,2.3rem);letter-spacing:-.015em;padding:.85rem 0}
+.ri::after{content:"";flex:none;width:.5em;height:.5em;margin:0 1.5rem;background:var(--m,#0C1530);transform:rotate(45deg)}
+@keyframes mq{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){
+  .rtrack{animation:none;width:100%;justify-content:center;padding:0 var(--pad)}
+  .rset{flex:0 1 auto;max-width:100%;flex-wrap:wrap;justify-content:center}
+  .rset[aria-hidden="true"]{display:none}
+  .ri{padding:.25rem 0;font-size:clamp(1.05rem,2vw,1.45rem)}
+  .ri::after{margin:0 .9rem}
+  .ri:last-child::after{display:none}
+  .rtrack{padding-top:.7rem;padding-bottom:.7rem}
+}
+
+/* photo header + filters */
+.ph-head{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:1.5rem clamp(2rem,5vw,4rem);align-items:end;margin-bottom:2.2rem}
+.ph-head .sec-lede{margin-bottom:0}
+.ph-head h2.sec{margin-bottom:.8rem}
+.filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem}
+.flt{font-family:var(--display);text-align:left;border:0;padding:1rem 1rem .9rem;background:var(--c);color:var(--t);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.flt b{display:block;font-weight:800;font-size:clamp(2rem,3.6vw,2.9rem);line-height:1;letter-spacing:-.02em}
+.flt span{display:block;font-weight:700;font-size:.92rem;margin-top:.35rem}
+.flt:hover{transform:translateY(-2px)}
+.flt[aria-pressed="true"]{box-shadow:0 6px 0 var(--marigold),0 0 0 3px var(--ink);transform:translateY(-3px)}
+@media (max-width:52rem){.ph-head{grid-template-columns:1fr}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* bands and colour */
+.band{width:100%}
+.band.sky{background:var(--sky)}
+.band.blush{background:var(--blush)}
+.band.lemon{background:var(--lemon)}
+.work .cat{font-family:var(--display);font-weight:700;font-size:.88rem;padding:.2rem .7rem;justify-self:start;color:#0C1530!important;background:var(--c,var(--line))}
+.timeline li:nth-child(4n+1)::before{background:var(--marigold)}
+.timeline li:nth-child(4n+2)::before{background:var(--coral)}
+.timeline li:nth-child(4n+3)::before{background:var(--mint)}
+.timeline li:nth-child(4n+4)::before{background:var(--violet)}
+
+/* stage & spotlight spreads */
+.spreads{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:1.25rem;align-items:stretch}
+.spread{display:flex;flex-direction:column;gap:1.5rem;padding:clamp(1.2rem,2.4vw,2rem);min-width:0}
+.spread.w7{grid-column:span 7}.spread.w5{grid-column:span 5}.spread.w6{grid-column:span 6}
+.spread.row{flex-direction:row;align-items:flex-start}
+.spread .sp-img{padding:0;border:0;background:none;display:block;cursor:zoom-in;flex:none}
+.spread .sp-img img{display:block;width:100%;height:auto;border:4px solid #fff;box-shadow:8px 8px 0 var(--sh,#0C1530)}
+.spread.row .sp-img{width:min(44%,14rem)}
+.spread .tx{min-width:0;font-family:var(--display);display:flex;flex-direction:column;flex:1}
+.spread .quote{margin:.2rem 0 1.1rem;padding:.1rem 0 .1rem 1rem;border-left:5px solid currentColor;font-weight:800;font-size:clamp(1.15rem,1.9vw,1.5rem);line-height:1.2;letter-spacing:-.01em}
+.spread .kick{font-weight:700;font-size:1rem;opacity:.9;margin:0 0 .3rem}
+.spread h3{font-weight:800;font-stretch:88%;font-variation-settings:"wdth" 88;font-size:clamp(1.6rem,2.8vw,2.4rem);line-height:1.04;letter-spacing:-.015em;margin:0 0 .8rem}
+.spread p{margin:0 0 1rem;font-size:1.02rem;line-height:1.5}
+.spread .tags{display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 1rem}
+.spread .tags span{font-weight:700;font-size:.85rem;padding:.2rem .65rem;border:2px solid currentColor}
+.spread .credit{font-size:.85rem;opacity:.75;margin:auto 0 0;padding-top:.8rem}
+.spread a.go{font-weight:800;color:inherit;text-decoration:none;border-bottom:3px solid currentColor}
+@media (max-width:60rem){.spread.w7,.spread.w5,.spread.w6{grid-column:1/-1}}
+@media (max-width:40rem){.spread.row{flex-direction:column}.spread.row .sp-img{width:min(75%,17rem)}}
+
+/* about side column */
+.about{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+.about-side{display:grid;gap:1rem;position:sticky;top:5rem;align-self:start}
+.about-side .arch{width:100%;max-width:100%;aspect-ratio:3/4;object-fit:cover}
+.fact{padding:1.2rem 1.3rem;font-family:var(--display)}
+.fact .fk{display:block;font-weight:700;font-size:.95rem;opacity:.85;margin-bottom:.35rem}
+.fact b{display:block;font-weight:800;font-size:1.3rem;line-height:1.15;margin-bottom:.25rem}
+.fact span.ln{display:block;font-size:.98rem;opacity:.92}
+.fact.now{background:var(--cobalt);color:#fff}
+.fact.nums{background:#0C1530;color:#fff;display:grid;grid-template-columns:repeat(3,1fr);gap:0;padding:1.3rem .5rem;text-align:center}
+.fact.nums>div{border-left:1px solid #2A3658;padding:0 .6rem}
+.fact.nums>div:first-child{border-left:0}
+.fact.nums .n{display:block;font-weight:800;font-size:2.3rem;line-height:1;color:var(--marigold)}
+.fact.nums small{display:block;font-size:.85rem;opacity:.85;margin-top:.25rem}
+.fact.skills{background:#fff;border:3px solid var(--ink)}
+.fact .tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.fact .tags span{font-weight:700;font-size:.88rem;padding:.25rem .6rem;color:#0C1530;background:var(--marigold)}
+.fact .tags span:nth-child(4n+2){background:var(--coral)}
+.fact .tags span:nth-child(4n+3){background:var(--mint)}
+.fact .tags span:nth-child(4n+4){background:#C9D6FF}
+@media (max-width:52rem){.about{grid-template-columns:minmax(0,1fr)}.about-side{position:static}.about-side .arch{max-width:22rem}.fact.nums .n{font-size:1.9rem}}
+
+/* ---------- article ---------- */
+#prog{position:fixed;top:0;left:0;height:5px;width:100%;background:var(--marigold);transform-origin:0 50%;transform:scaleX(0);z-index:60}
+.post-head{padding:0 var(--pad) clamp(2.5rem,7vw,5rem)}
+.post-head .in{max-width:64rem;margin:0 auto}
+.post-head .topbar{padding-left:0;padding-right:0;margin:0 auto;max-width:64rem}
+.post-head .k{font-family:var(--display);font-weight:600;font-size:1.05rem;margin:clamp(2rem,6vw,4rem) 0 .8rem;opacity:.9}
+.post-head h1{font-family:var(--display);font-weight:800;font-stretch:80%;font-variation-settings:"wdth" 80;font-size:clamp(2.8rem,9vw,7rem);line-height:.95;letter-spacing:-.02em;margin:0 0 1.6rem;max-width:56rem}
+.byline{font-family:var(--display);font-size:1.05rem;margin:0;display:flex;gap:.4rem 1.5rem;flex-wrap:wrap}
+.prose{max-width:41rem;margin:0 auto;padding:clamp(2.5rem,5vw,4rem) var(--pad) 3rem;font-size:1.2rem;line-height:1.72}
+.prose>p:first-of-type::first-letter{-webkit-text-stroke:.02em currentColor;font-family:var(--display);font-weight:800;color:var(--accent);float:left;font-size:5.2em;line-height:.78;padding:.06em .1em 0 0}
+.prose p{margin:0 0 1.4rem}
+.prose h2{font-family:var(--display);font-weight:800;-webkit-text-stroke:.02em currentColor;font-size:clamp(1.7rem,3.6vw,2.2rem);line-height:1.1;letter-spacing:-.015em;margin:3rem 0 1rem}
+.prose ul,.prose ol.plain{padding-left:1.3rem;margin:0 0 1.6rem}
+.prose li{margin-bottom:.55rem}
+.pull{width:min(52rem,92vw);margin:3rem 0 3rem calc(50% - min(26rem,46vw));padding:0 0 0 1.4rem;border-left:8px solid var(--marigold)}
+.pull p{font-family:var(--display);font-weight:800;font-stretch:88%;font-variation-settings:"wdth" 88;font-size:clamp(1.9rem,4.8vw,3.3rem);line-height:1.05;letter-spacing:-.02em;color:var(--accent);margin:0}
+
+/* scrollytelling */
+.scrolly{width:min(70rem,94vw);margin:3.5rem 0 3.5rem calc(50% - min(35rem,47vw));display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(1.5rem,5vw,4rem)}
+.stage{position:sticky;top:1.5rem;align-self:start;background:var(--deep);color:#fff;padding:1.5rem;font-family:var(--display)}
+.stage .task{margin:0 0 1.3rem;font-size:1rem;line-height:1.4;padding-bottom:1.1rem;border-bottom:1px solid #2A3658}
+.stage .task b{color:var(--marigold)}
+.loop{list-style:none;margin:0;padding:0;display:grid;gap:.35rem}
+.loop button{display:flex;align-items:center;gap:.85rem;width:100%;text-align:left;background:none;border:0;padding:.35rem 0;opacity:.5;transition:opacity .2s}
+.loop button i{font-style:normal;font-weight:800;width:2.1rem;height:2.1rem;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;flex:none;transition:background .2s,color .2s,border-color .2s}
+.loop button span{font-weight:700;font-size:1.15rem}
+.loop li p{margin:0;padding:0 0 0 2.95rem;font-size:1rem;line-height:1.45;color:#D6DDEC;max-height:0;overflow:hidden;opacity:0;transition:max-height .35s ease,opacity .25s,padding .35s}
+.loop li.on button{opacity:1}
+.loop li.on button i{background:var(--marigold);border-color:var(--marigold);color:var(--deep)}
+.loop li.on p{max-height:9rem;opacity:1;padding-bottom:.6rem}
+.stage .back{margin:1.1rem 0 0;padding-top:1rem;border-top:1px solid #2A3658;font-size:.95rem;color:#B8C2D8}
+.steps .step{min-height:52vh;display:flex;flex-direction:column;justify-content:center;padding:1rem 0}
+.steps .step:first-child{min-height:44vh}
+.steps h3{font-family:var(--display);font-weight:800;-webkit-text-stroke:.02em currentColor;font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.1;letter-spacing:-.015em;margin:0 0 .8rem}
+.steps p{margin:0}
+@media (max-width:52rem){
+  .scrolly{display:block}
+  .stage{top:.9rem;z-index:20;padding:1rem}
+  .stage .task{font-size:.9rem;margin-bottom:.8rem;padding-bottom:.8rem}
+  .loop{grid-template-columns:repeat(5,1fr);gap:.4rem}
+  .loop li{display:contents}
+  .loop button{flex-direction:column;gap:.3rem;padding:.2rem 0;text-align:center}
+  .loop button span{font-size:.8rem}
+  .loop li p{grid-column:1/-1;order:10;display:none;padding:.6rem 0 0;max-height:none;opacity:1}
+  .loop li.on p{display:block}
+  .stage .back{display:none}
+  .steps .step{min-height:60vh}
+}
+
+/* audit */
+.audit{border:3px solid var(--ink);padding:1.4rem 1.5rem;margin:2rem 0;font-family:var(--display)}
+.audit h3{margin:0 0 .3rem;font-size:1.35rem}
+.audit p.sub{margin:0 0 1rem;color:var(--slate);font-size:1rem}
+.audit label{display:flex;gap:.8rem;align-items:flex-start;padding:.55rem 0;border-top:1px solid var(--line);cursor:pointer;font-size:1.05rem;line-height:1.35}
+.audit input{width:1.3rem;height:1.3rem;margin-top:.1rem;accent-color:var(--cobalt);flex:none}
+.audit .out{margin:1rem 0 0;padding:.9rem 1rem;background:var(--marigold);color:#0C1530;font-weight:600;font-size:1.05rem;line-height:1.4}
+
+.more{max-width:64rem;margin:0 auto;padding:1rem var(--pad) 4rem}
+.more h2{font-family:var(--display);font-weight:800;-webkit-text-stroke:.02em currentColor;font-size:2.4rem;letter-spacing:-.02em;margin:0 0 1.2rem}
+.more .mag .tile,.more .mag .tile:first-child{grid-column:span 6;grid-row:auto;min-height:15rem}
+.more .mag .tile:first-child h3{font-size:clamp(1.9rem,3.4vw,2.9rem)}
+@media (max-width:52rem){.more .mag .tile,.more .mag .tile:first-child{grid-column:1/-1}}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .loop li p,.loop button,.loop button i,.line .t,.tile h3 span{transition:none}
+}
+</style>
+</head>
+<body>
+<div id="prog" aria-hidden="true"></div>
+<div id="app"></div>
+<noscript><p style="padding:2rem;font-family:sans-serif">This magazine needs JavaScript to display its stories.</p></noscript>
+
+<script>
+/* =====================================================================
+   EDIT HERE
+   To add a story: copy one object in POSTS, put it first, change it.
+   slug = the URL part (yoursite.com/#/post/<slug>). bg/fg = tile colors.
+   body = plain HTML. Special pieces available inside body:
+     <aside class="pull"><p>Pull quote text</p></aside>
+   ===================================================================== */
+
+const SITE = {
+  name: "Mohammed Zaid Waghoo",
+  short: "Mohammed Zaid Waghoo",
+  issue: "Issue 01, September 2026",
+  links: [
+    {label:"GitHub", note:"Mohammedzaid18", url:"https://github.com/Mohammedzaid18"},
+    {label:"LinkedIn", note:"mohammedzaidwaghoo", url:"https://www.linkedin.com/in/mohammedzaidwaghoo"},
+    {label:"DEV Community", note:"Articles on dev.to", url:"https://dev.to/mohammedzaidwaghoo"},
+    {label:"Portfolio", note:"Projects and client work", url:"https://mohammedzaidwaghoo.netlify.app/"},
+    {label:"Email", note:"mx4zaid@gmail.com", url:"mailto:mx4zaid@gmail.com"}
+  ]
+};
+
+const POSTS = [
+  {
+    slug:"how-an-ai-agent-works",
+    kicker:"Cover story",
+    title:"How an AI agent works, step by step",
+    date:"2026-09-29",
+    tag:"AI",
+    summary:"Input, thinking, memory, action, result. Scroll through the five-part loop behind every agent, then see what it could mean for public services in India.",
+    bg:"#0C1530", fg:"#FFB000",
+    body:`
+      <p>Most people use a chatbot as a question box: you ask, it answers, and that is the end of it. An agent is different. It is given a goal, works out the steps, uses tools to carry them out, and checks what happened before it answers.</p>
+      <p>Every agent I have looked at runs the same loop of five parts. Scroll down and watch the panel follow along with a made-up example.</p>
+
+      <div class="scrolly">
+        <div class="stage" aria-label="The agent loop, following the example task">
+          <p class="task"><b>Example task:</b> &ldquo;Renew my driving licence. I only speak Marathi.&rdquo;</p>
+          <ol class="loop">
+            <li class="on"><button type="button"><i>1</i><span>Input</span></button><p>You speak the request in Marathi. Bhashini turns it into text the model can read.</p></li>
+            <li><button type="button"><i>2</i><span>Thinking</span></button><p>The model plans: check licence status, find the renewal form, verify documents, book a slot.</p></li>
+            <li><button type="button"><i>3</i><span>Memory</span></button><p>It recalls your earlier application and which documents were already verified.</p></li>
+            <li><button type="button"><i>4</i><span>Action</span></button><p>It calls the licensing portal and the appointment system through their APIs.</p></li>
+            <li><button type="button"><i>5</i><span>Result</span></button><p>You hear it back in Marathi: renewal filed, appointment fixed, every step logged for review.</p></li>
+          </ol>
+          <p class="back">The result goes back into memory, so the next task starts smarter.</p>
+        </div>
+        <div class="steps">
+          <div class="step" data-i="0"><h3>It starts with a person and a task</h3><p>The user gives a task or question in natural language, by typing or by speaking. The agent has to turn that into something a model can work with.</p></div>
+          <div class="step" data-i="1"><h3>The model makes a plan</h3><p>It breaks the goal down into steps. Planning methods such as ReAct make it reason, act, look at what happened, and reason again.</p></div>
+          <div class="step" data-i="2"><h3>Memory keeps the steps connected</h3><p>The agent recalls relevant information and keeps context, so step four knows what step one found. Without it, every step starts from zero.</p></div>
+          <div class="step" data-i="3"><h3>Action is what makes it an agent</h3><p>It uses tools or APIs, such as web search, a database or code, to do real work instead of only describing it.</p></div>
+          <div class="step" data-i="4"><h3>The result, and the loop closes</h3><p>You get the final answer, insight or action in a clear, useful format. What happened is fed back so the agent keeps improving.</p></div>
+        </div>
+      </div>
+
+      <h2>What the stack usually contains</h2>
+      <ul>
+        <li>A language model (LLM, or a smaller SLM) as the reasoning core</li>
+        <li>Step-by-step planning with ReAct</li>
+        <li>Verified data search with retrieval-augmented generation (RAG)</li>
+        <li>Indian APIs and cloud services</li>
+        <li>Bhashini for Indian languages</li>
+      </ul>
+
+      <h2>An idea for public services: a Bharati Agent Grid</h2>
+      <p>In a deck I put together on Viksit Bharat @2047, I proposed one common agent platform, built on India's digital public infrastructure, that every department and state could use instead of many separate apps.</p>
+      <figure class="fig"><img src="images/ai-talk-1.jpg" alt="Illustration of a presenter pointing at a slide about how AI builds Viksit Bharat at 2047" loading="lazy"><figcaption>Illustration of the Viksit Bharat @2047 talk, made with ChatGPT.</figcaption></figure>
+      <aside class="pull"><p>An agent people cannot audit is an agent people will not trust with anything important.</p></aside>
+      <p>Two design choices matter most. First, it works by voice in local languages through Bhashini, so no one is left behind because of language or literacy. Second, every action is recorded and can be reviewed, so the system stays clear, safe and trusted.</p>
+      <p>I explored the building blocks in Phoenix AI, a modular prompt engineering framework with pluggable tool-chaining for automation in healthcare, CRM and business. I will write more about each part of the loop, starting with memory, since that is where most agents I see fall over.</p>
+    `
+  },
+  {
+    slug:"matching-blood-in-real-time",
+    kicker:"Healthcare",
+    title:"Matching blood in real time",
+    date:"2026-09-26",
+    tag:"Healthcare",
+    summary:"The rules behind a blood bank system, with an interactive explorer: pick a patient and see which donor groups are compatible.",
+    bg:"#FF6B4A", fg:"#0C1530",
+    body:`
+      <p>When someone needs blood urgently, nobody wants to search a spreadsheet. I built a Blood Bank Management System around one question: for this patient, which units on the shelf can be used, and who should be served first?</p>
+      <p>The platform has three parts. A real-time dashboard shows how many units of each type are available. A matching engine checks ABO and Rh compatibility. And an emergency request queue routes the most urgent cases first. It is built with React, Node.js and MongoDB.</p>
+      <h2>The rule underneath: ABO and Rh</h2>
+      <p>Red blood cells can carry an A marker, a B marker, both, or neither, plus an Rh marker that is positive or negative. A patient's immune system reacts to markers it does not have. So O negative cells, which carry none, can go to almost anyone, while AB positive patients can receive from every group.</p>
+      <div data-widget="blood"></div>
+      <h2>Why matching is more than a lookup table</h2>
+      <p>A table tells you which groups are compatible. A useful system also has to answer two more questions: which compatible unit should be used first, and what happens when two patients need the same scarce unit?</p>
+      <aside class="pull"><p>In an emergency queue, first come, first served is the wrong rule.</p></aside>
+      <p>That is why the request queue is priority-based. A critical trauma request should move ahead of a routine one, even if it arrived later, and the dashboard has to show the shelf as it is now, not as it was an hour ago.</p>
+      <p class="note">The explorer above is simplified to red cell compatibility. Real transfusion decisions also involve cross-matching and clinical checks.</p>
+    `
+  },
+  {
+    slug:"ten-games-zero-placeholders",
+    kicker:"Mobile",
+    title:"Ten games, zero placeholders: building ARCADE 50",
+    date:"2026-09-22",
+    tag:"Mobile",
+    summary:"An offline Android game collection where every game has real logic, and how I proved it with tests instead of trusting my eyes.",
+    bg:"#2036E8", fg:"#FFFFFF",
+    body:`
+      <p>ARCADE 50 is an offline Android app: a collection of games across board, sports, arcade, puzzle and action categories, built with React Native, Expo and TypeScript, with no backend and no internet needed.</p>
+      <p>Fifty games is a lot, so I scoped version 1.0 to the ten board and classic games and made a rule for myself: every game that ships must be genuinely playable. No fake screens, no &ldquo;coming soon&rdquo; tiles, and no copied branding. The card game is an original called Color Clash, not UNO.</p>
+      <h2>Proving it, one game at a time</h2>
+      <p>Compiling is not the same as working. So each game got its own tests. Pick a game to see how it was checked.</p>
+      <div data-widget="checks"></div>
+      <aside class="pull"><p>A game that only compiles is not a finished game.</p></aside>
+      <h2>One pipeline for every result</h2>
+      <p>Every game reports its result through a single service. It updates that game's stats, awards XP and coins, tracks daily streaks and checks achievements, all in one step, so a new game gets progression for free.</p>
+      <h2>What is left</h2>
+      <p>All ten version 1.0 games are done. Next comes an achievements screen, a real daily challenge, sound effects, a performance pass, release signing and the Play Store listing. The other forty games are for later versions.</p>
+    `
+  },
+  {
+    slug:"reading-the-road",
+    kicker:"Computer vision",
+    title:"Reading the road: a YOLOv8, ByteTrack and EasyOCR pipeline",
+    date:"2026-09-19",
+    tag:"AI",
+    summary:"How a smart-city traffic system finds vehicles, follows them and reads plates, and how it was tested end to end.",
+    bg:"#19C69B", fg:"#0C1530",
+    body:`
+      <p>I built an AI traffic monitoring and speed detection system as a full-stack smart-city platform. A FastAPI backend runs the AI pipeline, and a Next.js 14 dashboard shows what it finds. The pipeline combines three tools: YOLOv8, ByteTrack and EasyOCR.</p>
+      <p>Here is how a pipeline like this fits together, following one imaginary car through it.</p>
+
+      <div class="scrolly">
+        <div class="stage" aria-label="The traffic pipeline, following one car">
+          <p class="task"><b>Example:</b> a white hatchback passes the camera.</p>
+          <ol class="loop">
+            <li class="on"><button type="button"><i>1</i><span>Detect</span></button><p>YOLOv8 finds the car in the frame and draws a box around it.</p></li>
+            <li><button type="button"><i>2</i><span>Track</span></button><p>ByteTrack gives the box an ID and keeps that ID from frame to frame.</p></li>
+            <li><button type="button"><i>3</i><span>Measure</span></button><p>How far the tracked box moves over time gives the car's speed.</p></li>
+            <li><button type="button"><i>4</i><span>Read</span></button><p>EasyOCR reads the number plate from the cropped image.</p></li>
+            <li><button type="button"><i>5</i><span>Report</span></button><p>The event is stored by the API and appears on the dashboard.</p></li>
+          </ol>
+          <p class="back">Each stage only trusts what the stage before it produced.</p>
+        </div>
+        <div class="steps">
+          <div class="step" data-i="0"><h3>Detect: what is in the picture?</h3><p>YOLOv8 looks at every video frame and marks each vehicle with a box and a class, such as car, bus or motorbike. It answers what and where, one frame at a time.</p></div>
+          <div class="step" data-i="1"><h3>Track: is it the same car?</h3><p>Detection alone has no memory. ByteTrack links boxes across frames so a car that appears in frames 10, 11 and 12 is counted once, with one identity.</p></div>
+          <div class="step" data-i="2"><h3>Measure: how fast is it going?</h3><p>Once a car has a track, its movement can be turned into speed. That needs the camera to be calibrated, so pixels can be converted into real distance.</p></div>
+          <div class="step" data-i="3"><h3>Read: which plate is it?</h3><p>EasyOCR reads the characters from the plate region. Plates are small, angled and often blurred, so this is where most of the difficulty hides.</p></div>
+          <div class="step" data-i="4"><h3>Report: who needs to see it?</h3><p>The backend stores each event, and the dashboard turns the stream into something an operator can act on.</p></div>
+        </div>
+      </div>
+
+      <h2>How I tested it</h2>
+      <p>An AI demo that works once is not a system. The backend has 51 passing tests, the dashboard has 15 routes, and I ran real browser sessions with Playwright to check the whole thing from the operator's side.</p>
+      <aside class="pull"><p>Numbers on a dashboard are only as good as the tests behind them.</p></aside>
+      <h2>Security along the way</h2>
+      <p>While working on this and my portfolio I found and fixed a bcrypt and JWT token collision vulnerability, and upgraded Next.js to address a known CVE. Neither shows up in a demo, and both matter more than another feature.</p>
+    `
+  },
+  {
+    slug:"an-ai-wardrobe-under-dpdp",
+    kicker:"Product design",
+    title:"An AI wardrobe for Gen Z, designed around India's DPDP Act",
+    date:"2026-09-16",
+    tag:"Product",
+    summary:"StyleSync is a product design project: two AI models, a Gen Z audience, and privacy treated as a design input.",
+    bg:"#FFB000", fg:"#0C1530",
+    body:`
+      <p>StyleSync is an AI wardrobe assistant aimed at Gen Z users in India. I delivered it as a full product design document: UX persona research, technical architecture, marketing strategy and privacy compliance, all as polished interactive HTML documents.</p>
+      <h2>Two models, two jobs</h2>
+      <p>The system needs to answer two different questions. First, what is this garment? An EfficientNet-B0 model handles outfit recognition from photos. Second, what will this person want to wear? LightFM collaborative filtering handles recommendations, learning from what similar users liked.</p>
+      <p>Keeping those jobs separate makes each one easier to test and replace.</p>
+      <h2>Designing for the people who will use it</h2>
+      <p>The research covers Gen Z personas and their journeys, plus gamification and loyalty mechanics meant to bring people back. The architecture uses Next.js and MongoDB.</p>
+      <aside class="pull"><p>Privacy is cheaper to design in than to bolt on.</p></aside>
+      <h2>Privacy as a design input</h2>
+      <p>A library of someone's wardrobe photos is personal data. StyleSync was designed with India's Digital Personal Data Protection Act, 2023 in mind from the start, so consent and data handling shaped the architecture rather than arriving as an afterthought.</p>
+      <p class="note">This is a design write-up, not legal advice.</p>
+    `
+  },
+  {
+    slug:"what-a-clinic-website-has-to-do",
+    kicker:"Web",
+    title:"What a clinic's website actually has to do",
+    date:"2026-09-12",
+    tag:"Web",
+    summary:"Lessons from NM Aesthetics: a clinic website is not a brochure, it is the front door for enquiries. Score your own site in four ticks.",
+    bg:"#7B61FF", fg:"#FFFFFF",
+    body:`
+      <p>NM Aesthetics is a premium medical aesthetics clinic in Mumbai. Its website needed a luxury brand identity, a rich animation system, service showcases and a smooth patient enquiry flow, built with React, Next.js, Tailwind CSS and Framer Motion. I now lead technology and digital transformation there.</p>
+      <p>When a clinic asks for a website, the first request is usually how it should look. The more useful question is what happens after someone lands on it.</p>
+      <h2>Four jobs the site has to do</h2>
+      <ul>
+        <li><strong>Get found.</strong> Search visibility and clear service pages, so people arrive already interested.</li>
+        <li><strong>Take the enquiry.</strong> A short form or a message button that works well on a phone.</li>
+        <li><strong>Make follow-up automatic.</strong> Every enquiry lands somewhere it can be tracked.</li>
+        <li><strong>Show what is working.</strong> Simple analytics that tell the team which pages and channels bring real enquiries.</li>
+      </ul>
+      <div class="audit" data-audit>
+        <h3>Try it on your own site</h3>
+        <p class="sub">Tick the jobs your site already does well.</p>
+        <label><input type="checkbox"> People can find our service pages through search</label>
+        <label><input type="checkbox"> An enquiry takes under a minute on a phone</label>
+        <label><input type="checkbox"> Every enquiry is logged and followed up</label>
+        <label><input type="checkbox"> We can see which page or channel brings enquiries</label>
+        <p class="out" aria-live="polite">Tick what your site already does.</p>
+      </div>
+      <h2>What went wrong first</h2>
+      <p>Beautiful animation creates its own bugs. Along the way I fixed flip cards whose CSS misbehaved, a gallery that swallowed clicks because of pointer events, and a carousel that hijacked page scrolling. I also found that images hotlinked from one stock site were being blocked, so I moved to real treatment photos from Unsplash instead.</p>
+      <aside class="pull"><p>The design gets the attention. The workflow behind it decides whether the site pays for itself.</p></aside>
+      <p>The enquiry, appointment and follow-up steps, the lead tracking, and the reports that management can read without a technical background are what turn a good-looking site into a working one.</p>
+    `
+  },
+  {
+    slug:"on-stage-viksit-bharat",
+    kicker:"On stage",
+    title:"Leading a Viksit Bharat @2047 presentation",
+    date:"2026-09-10",
+    tag:"Talks",
+    summary:"A stage, a vision and a responsibility: what it meant to lead our team's talk on how technology can help build a developed India.",
+    bg:"#2036E8", fg:"#FFFFFF",
+    body:`
+      <p>It was a proud and meaningful experience to lead our presentation on Viksit Bharat @2047, and to stand before an audience and share our ideas on how technology and innovation can contribute to India's journey towards a developed nation.</p>
+      <p>Being on stage was not only about presenting information. It was about communicating a vision, engaging the audience and representing the ideas our team worked on together.</p>
+      <h2>What we talked about</h2>
+      <p>Our discussion explored how these areas can create opportunities and solve real-world challenges:</p>
+      <ul>
+        <li>Artificial intelligence</li>
+        <li>Digital transformation</li>
+        <li>Innovation</li>
+        <li>Sustainable development</li>
+        <li>Skill development</li>
+        <li>Entrepreneurship</li>
+      </ul>
+      <figure class="fig"><img src="images/ai-talk-1.jpg" alt="Illustration of a presenter pointing at a slide about how AI builds Viksit Bharat at 2047" loading="lazy"><figcaption>Illustration of the talk, made with ChatGPT.</figcaption></figure>
+      <aside class="pull"><p>The future of India is not something we simply wait to see. It is something we start building today.</p></aside>
+      <h2>What I took from it</h2>
+      <p>The most valuable part was stepping forward as a leader, presenter and technology enthusiast: taking an idea from preparation to the stage and communicating it with confidence.</p>
+      <p>I believe Viksit Bharat @2047 will not be built by one person, one technology or one sector. It will be built through millions of ideas, responsible innovation and the efforts of a generation willing to create something better. Today we are students and young professionals. Tomorrow we will be the people building those solutions.</p>
+      <p>The technical side of our proposal, an agent platform on India's digital public infrastructure, is in <a href="#/post/how-an-ai-agent-works">How an AI agent works, step by step</a>.</p>
+    `
+  },
+  {
+    slug:"24-hours-at-innovate-you",
+    kicker:"Hackathon",
+    title:"24 hours at Innovate You Techathon 2.0",
+    date:"2026-09-08",
+    tag:"Hackathon",
+    summary:"A national-level, 24-hour hackathon at AISSMS IOIT, Pune: what the event asked for and what I took away.",
+    bg:"#FF6B4A", fg:"#0C1530",
+    body:`
+      <p>Innovate You Techathon 2.0 was a national-level, 24-hour hackathon hosted by AISSMS Institute of Information Technology, Pune, designed to foster innovation and problem-solving among emerging technologists. It brought together student developers from across India to ideate, prototype and present solutions to real-world challenges.</p>
+      <p>I took part under the Student Innovation (SI-1) category and contributed to a solution-oriented project focused on practical issues from academic and societal domains.</p>
+      <figure class="fig tall"><img src="images/innovate-you.jpg" alt="Mohammed Zaid Waghoo in front of the Innovate You, Ignite to Invent hackathon banner" loading="lazy"><figcaption>At the Innovate You banner.</figcaption></figure>
+      <h2>What the event asked for</h2>
+      <p>The hackathon emphasized creativity, technical execution and impact-driven thinking, all inside a high-pressure, collaborative environment.</p>
+      <aside class="pull"><p>Creativity, technical execution and impact, all inside 24 hours.</p></aside>
+      <h2>Key takeaways</h2>
+      <ul>
+        <li>Applied frontend and problem-solving skills in a competitive setting</li>
+        <li>Collaborated with peers to develop a viable tech solution within 24 hours</li>
+        <li>Gained exposure to national-level innovation culture and peer benchmarking</li>
+      </ul>
+      <p>More hackathons and certificates are in <a href="#/post/the-receipts">The receipts</a>.</p>
+    `
+  },
+  {
+    slug:"the-receipts",
+    kicker:"Achievements",
+    title:"The receipts: hackathons, certificates and what they cover",
+    date:"2026-09-05",
+    tag:"Achievements",
+    summary:"Hackathon results and certifications in one filterable list, with what each one says about the work.",
+    bg:"#BFD0FF", fg:"#0C1530",
+    body:`
+      <p>Anyone can say they are good at something. This is my attempt to show the paper trail: hackathon results, and the certificates behind the skills I use in client work.</p>
+      <p>Use the filters to look at one thread at a time. Where a certificate can be verified online, there is a link.</p>
+      <div data-widget="achievements"></div>
+      <h2>What the list says</h2>
+      <p>The hackathons are where I learned to ship something in a weekend. The certificates cluster into three threads: data and analytics (Power BI, Python visualization, Google Analytics), AI and marketing (SEO, social media automation, AI in digital marketing), and engineering (advanced Python, JavaScript, and a back-end internship through TRYST at IIT Delhi).</p>
+      <aside class="pull"><p>Certificates show what I studied. Shipped projects show what I can do with it.</p></aside>
+      <p>The InnovateYou Techathon at AISSMS IOIT in Pune, a national level hackathon, is the one in the photo story on the home page, and its full story is in <a href="#/post/24-hours-at-innovate-you">24 hours at Innovate You Techathon 2.0</a>.</p>
+    `
+  },
+  {
+    slug:"hello",
+    kicker:"Editor's note",
+    title:"Hello, and what this magazine is for",
+    date:"2026-09-01",
+    tag:"Meta",
+    summary:"Why I am writing in public, and what you can expect to find in each issue.",
+    bg:"#14245A", fg:"#FFFFFF",
+    body:`
+      <p>I am Mohammed Zaid Waghoo, Zaid to most people. I build web software and AI systems, I am based in Mumbai, and I have spent the last few years moving between internships, hackathons and client projects.</p>
+      <p>I am starting this publication for a simple reason: I learn more when I write things down. Each story will cover something I built, something I got wrong, or something I wish I had known earlier.</p>
+      <aside class="pull"><p>Each story: something I built, something I got wrong, or something I wish I had known.</p></aside>
+      <h2>What to expect in each issue</h2>
+      <ul>
+        <li>Explainers on AI agents, automation and CRM systems</li>
+        <li>Notes from real projects, with the lessons and not only the highlights</li>
+        <li>Photo stories from hackathons and tech events</li>
+      </ul>
+      <p>My full project list is under &ldquo;The work&rdquo; on the home page. If something here is useful, or wrong, I would like to hear about it. My email is at the bottom of the page.</p>
+    `
+  }
+];
+
+const PROJECTS = [
+  {name:"American Cuisine", cat:"Hospitality", stack:"React, Node.js, MongoDB, Framer Motion, Stripe", text:"A premium restaurant web experience with real-time table booking, online ordering with a dynamic cart, animated menu showcases, a chef's specials rotator and a loyalty rewards section."},
+  {name:"NM Aesthetics", cat:"Healthcare", stack:"React, Next.js, Tailwind CSS, Framer Motion", text:"A luxury website for a medical aesthetics clinic in Mumbai, with a rich animation system, service showcases and a seamless patient enquiry flow.", story:"what-a-clinic-website-has-to-do"},
+  {name:"DriveElite", cat:"E-commerce", stack:"React, Tailwind, Framer Motion, Node.js", text:"A luxury car rental platform with 22 vehicles, a hexagonal NumHex badge design, multi-step booking and an animated mesh and hex background."},
+  {name:"BIG BILLS", cat:"Healthcare", stack:"OCR, Python, FastAPI, React", text:"An OCR-powered billing platform that digitises physical bills into structured records, with a modular workflow engine for multi-role clinic automation."},
+  {name:"Blood Bank Management", cat:"Healthcare", stack:"React, Node.js, MongoDB, real-time", text:"Real-time blood availability, smart ABO and Rh matching, and an emergency request queue with priority-based routing.", story:"matching-blood-in-real-time"},
+  {name:"Phoenix AI", cat:"AI", stack:"Python, prompt engineering, LLM APIs", text:"A modular prompt engineering framework with pluggable tool-chaining for AI-native automation across healthcare, CRM and business.", story:"how-an-ai-agent-works"},
+  {name:"AI Traffic Monitoring", cat:"AI", stack:"FastAPI, YOLOv8, ByteTrack, EasyOCR, Next.js 14", text:"A smart-city platform that detects vehicles, tracks them, estimates speed and reads plates, with 51 backend tests and browser-verified dashboard routes.", story:"reading-the-road"},
+  {name:"StyleSync", cat:"AI", stack:"EfficientNet-B0, LightFM, Next.js, MongoDB", text:"An AI wardrobe assistant for Gen Z in India, delivered as a full product design document with privacy compliance built in.", story:"an-ai-wardrobe-under-dpdp"},
+  {name:"ARCADE 50", cat:"Mobile", stack:"React Native, Expo, TypeScript", text:"An offline Android game collection. Version 1.0 has ten fully playable board and classic games, each verified with automated tests.", story:"ten-games-zero-placeholders"},
+  {name:"E-Commerce Gaming Platform", cat:"E-commerce", stack:"React, Node.js, Stripe", text:"A gaming store with multi-facet filtering, a secure multi-step checkout, an admin sales dashboard, order tracking and a mobile-first interface."}
+];
+
+const CHECKS = [
+  {game:"Tic-Tac-Toe", stat:"500", label:"games, zero losses", text:"The unbeatable CPU uses real minimax search. A 500-game randomized test confirmed it never lost."},
+  {game:"Connect Four", stat:"40", label:"games, zero losses", text:"The hard CPU uses alpha-beta search five moves deep, and never lost across 40 full games."},
+  {game:"Checkers", stat:"30", label:"games, zero rule breaks", text:"Forced captures, multi-jump chains and king promotion. Thirty randomized games produced no forced-capture violations."},
+  {game:"Solitaire", stat:"6", label:"logic tests", text:"Klondike, draw one. Tests cover the deal, foundation rules and which tableau moves are legal."},
+  {game:"Minesweeper", stat:"50", label:"first-click trials", text:"The first click is never a mine, checked over 50 trials, along with number accuracy, flood-fill reveal and win and loss detection."},
+  {game:"Sudoku", stat:"1", label:"solution per puzzle", text:"Cells are removed only if the puzzle still has exactly one solution, and tests confirm that holds for every difficulty."},
+  {game:"Color Clash", stat:"8", label:"logic tests", text:"An original card game with a 108-card deck. Tests cover the deck, dealing, skips, reverse in two-player and larger games, draw stacking, wins and illegal moves."},
+  {game:"Pool", stat:"2D", label:"custom physics engine", text:"Elastic collisions, cushion bounces, friction and pockets, plus full 8-ball rules. The CPU tries candidate shots through the same physics engine."},
+  {game:"Ludo", stat:"8", label:"rule tests", text:"Exact-roll finishes, captures with safe cells, bonus turns on a six and the three-sixes penalty are all tested."},
+  {game:"Chess", stat:"8,902", label:"positions at depth 3", text:"Full rules including castling, en passant and promotion. Move counts of 20, 400 and 8,902 at depths one to three match the known correct values."}
+];
+
+const ACHIEVEMENTS = [
+  {sort:202606, year:"2026", title:"SEO Strategies", org:"Great Learning", res:"Certificate", type:"AI and marketing", url:"https://www.mygreatlearning.com/certificate/PZKGKMBR"},
+  {sort:202509.3, year:"2025", title:"Python Advanced Assessment", org:"LearnTube.ai", res:"Certificate", type:"Engineering"},
+  {sort:202509.2, year:"2025", title:"Leadership Skill Assessment", org:"LearnTube.ai", res:"Certificate", type:"Engineering"},
+  {sort:202509.1, year:"2025", title:"Social Media Automation With AI", org:"WsCube Tech", res:"Certificate", type:"AI and marketing"},
+  {sort:202509, year:"2025", title:"AI in Digital Marketing Masterclass", org:"IIDE, The Digital School", res:"Certificate", type:"AI and marketing"},
+  {sort:202508.9, year:"2025", title:"Back-End Development Summer Internship", org:"Course Central and TRYST, IIT Delhi", res:"Aug to Sep 2025", type:"Engineering"},
+  {sort:202508.5, year:"2025", title:"Power BI Workshop: AI-Powered Dashboards", org:"OfficeMaster", res:"Certificate", type:"Data"},
+  {sort:202508, year:"2025", title:"Data Visualization With Power BI", org:"Great Learning", res:"Certificate", type:"Data", url:"https://www.mygreatlearning.com/certificate/BPPUHLVD"},
+  {sort:202507, year:"2025", title:"Data Visualization using Python", org:"Great Learning", res:"Certificate", type:"Data", url:"https://www.mygreatlearning.com/certificate/OJDEYOCB"},
+  {sort:202506, year:"2025", title:"Google Analytics", org:"Great Learning", res:"Certificate", type:"Data", url:"https://www.mygreatlearning.com/certificate/UEYUKCQI"},
+  {sort:202502.5, year:"2025", title:"JavaScript: 5-Day Live Workshop", org:"Code Easy Academy", res:"Certificate", type:"Engineering"},
+  {sort:202502, year:"2025", title:"InnovateYou Techathon 2.0, national level", org:"Innovation Foundation and AISSMS IOIT, Pune", res:"Feb 22 to 23", type:"Hackathons"},
+  {sort:202300.2, year:"2023", title:"National Tech Sprint", org:"Hackathon", res:"1st place", type:"Hackathons"},
+  {sort:202300.1, year:"2023", title:"AI & Automation Hack", org:"Hackathon", res:"Runner-up", type:"Hackathons"},
+  {sort:202200.2, year:"2022", title:"GrowthHack Summit", org:"Hackathon", res:"3rd place", type:"Hackathons"},
+  {sort:202200.1, year:"2022", title:"WebDev Challenge", org:"Hackathon", res:"4th place", type:"Hackathons"},
+  {sort:202100, year:"2021", title:"Startup Weekend", org:"Hackathon", res:"1st place", type:"Hackathons"}
+];
+
+const EVENTS = [
+  {r:1.137, tag:"Conferences", img:"images/techsparks.jpg", alt:"Mohammed Zaid Waghoo with Akis Evangelidis of Nothing at TechSparks", cap:"TechSparks 2025", sub:"With Akis Evangelidis of Nothing"},
+  {r:1.333, tag:"Conferences", img:"images/sushi-tech.jpg", alt:"Mohammed Zaid Waghoo holding a SusHi Tech Tokyo sign with a representative at the event booth", cap:"SusHi Tech Tokyo", sub:"Event booth, Bengaluru"},
+  {r:1.779, tag:"Hackathons", img:"images/innovate-you.jpg", alt:"Mohammed Zaid Waghoo in front of the Innovate You, Ignite to Invent hackathon banner", cap:"Innovate You Techathon 2.0", sub:"National-level, 24-hour hackathon",
+   info:"Hosted by AISSMS Institute of Information Technology, Pune, for student developers from across India. I took part in the Student Innovation (SI-1) category.", story:"24-hours-at-innovate-you"},
+  {r:1.779, tag:"Campus", img:"images/aissms.jpg", alt:"Mohammed Zaid Waghoo standing in front of the AISSMS Institute of Information Technology building", cap:"On campus", sub:"AISSMS Institute of IT, Pune",
+   info:"The host campus of Innovate You Techathon 2.0, where teams ideated, prototyped and presented solutions to real-world challenges.", story:"24-hours-at-innovate-you"},
+  {r:1.854, tag:"Hackathons", img:"images/team-bytes.jpg", alt:"Black and white collage of Team Bytes at Hackathon 2K25, with team members gathered around a laptop and a judge reading notes", cap:"Team Bytes", sub:"Hackathon 2K25"},
+  {r:1.779, tag:"Conferences", img:"images/google-admob.jpg", alt:"Mohammed Zaid Waghoo in front of a Google AdMob backdrop", cap:"Google AdMob", sub:"Developer event"}
+];
+
+const SPREADS = [
+  {layout:"col", span:"w7", bg:"#2036E8", fg:"#FFFFFF", sh:"#FFB000", img:"images/ai-talk-1.jpg",
+   alt:"Presenter in a red shirt pointing at a slide titled How This Builds Viksit Bharat at 2047, listing economy, productivity, jobs and skills, inclusion, and environment and self-reliance",
+   kicker:"On stage", title:"Leading the Viksit Bharat @2047 presentation",
+   info:"I led our team's presentation on how technology and innovation can contribute to India's journey towards a developed nation. We explored how AI, digital transformation, innovation, sustainable development, skill development and entrepreneurship can create opportunities and solve real-world challenges.",
+   quote:"A stage, a vision, and a responsibility to think about the India we want to see in 2047.",
+   tags:["AI","Digital transformation","Innovation","Sustainable development","Skill development","Entrepreneurship"], story:"on-stage-viksit-bharat", credit:"Illustration made with ChatGPT"},
+  {layout:"col", span:"w5", bg:"#FFB000", fg:"#0C1530", sh:"#0C1530", img:"images/ai-talk-2.jpg",
+   alt:"Presenter beside a slide titled How an AI Agent Works, Step by Step, with five stages from input to result",
+   kicker:"The agent loop", title:"How an AI agent works, step by step",
+   info:"The technical slide walks the five-part loop and proposes a Bharati Agent Grid: one common platform on India's digital public infrastructure, working by voice in local languages, with every action recorded.",
+   tags:["Input","Thinking","Memory","Action","Result"], story:"how-an-ai-agent-works", credit:"Illustration made with ChatGPT"},
+  {layout:"row", span:"w6", bg:"#0C1530", fg:"#FFFFFF", sh:"#FFB000", img:"images/ai-event-1.jpg",
+   alt:"Man in a blue Diesel T-shirt and blue cap wearing an event pass on a lanyard, standing beside a woman in sunglasses against a dark background",
+   kicker:"Event night", title:"India Rising: Road to EWC 2026",
+   info:"An experience I will remember: the energy of India's growing esports ecosystem, with top creators, professional players and passionate fans under one roof. From exciting matches to creator interactions, it showed the future of Indian esports.",
+   tags:["Esports","Creators","Road to EWC 2026"], credit:"Portrait made with Meta AI"},
+  {layout:"row", span:"w6", bg:"#FF6B4A", fg:"#0C1530", sh:"#0C1530", img:"images/ai-event-2.jpg",
+   alt:"Man in a blue Diesel T-shirt and black cap wearing an event pass and wristband, standing beside a woman giving a thumbs up, with a crowd behind",
+   kicker:"The highlights", title:"Creators, teams and a big stage",
+   info:"Highlights included meeting creators Mizo and Deepanshi Rawat (Dobby Is Live), and seeing S8UL Esports and GodLike Esports share the stage and celebrate the growth of the gaming community. Thanks to the India Rising team for the effort.",
+   tags:["S8UL Esports","GodLike Esports","Gaming community"], credit:"Portrait made with Meta AI"}
+];
+const CAT_COLORS = {Healthcare:"#FF8F73", Hospitality:"#FFB000", "E-commerce":"#B7A8FF", AI:"#9DB4FF", Mobile:"#19C69B"};
+const ALL_PHOTOS = EVENTS.concat(SPREADS.map(e => ({img:e.img, alt:e.alt, cap:e.title, sub:e.credit, info:e.info, story:e.story})));
+
+const TIMELINE = [
+  {when:"September 2021 to June 2025", what:"Diploma in Computer Engineering", where:"University of Mumbai, Anjuman-I-Islam's Kalsekar Technical Campus"},
+  {when:"June 2022 to April 2023", what:"Software Developer Intern", where:"Hasbasoft Technology, Navi Mumbai. Built and delivered replicas of multiple websites while learning professional workflows."},
+  {when:"June 2024 to December 2024", what:"Software Developer Intern", where:"Infidocs Technologies, Pune. Built a working replica of the company website and worked with Oracle databases, Python and automation tools."},
+  {when:"January 2026 to now", what:"Director of Technology & Digital Transformation", where:"NM Aesthetics, Mumbai. Leads the website, digital systems, automation, SEO and analytics."}
+];
+
+/* =====================================================================
+   Site code. You should not need to change anything below.
+   ===================================================================== */
+
+const $app = document.getElementById('app');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fmt = d => new Date(d + 'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const mins = p => Math.max(1, Math.round(p.body.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length / 190));
+
+const NAV = `<nav aria-label="Main">
+  <a href="#/stories">Stories</a><a href="#/work">Work</a><a href="#/photos">Photos</a><a href="#/about">About</a><a href="#/contact">Contact</a></nav>`;
+
+function tiles(list){
+  return `<div class="mag">` + list.map(p => `
+    <a class="tile" href="#/post/${p.slug}" style="background:${p.bg};color:${p.fg}">
+      <span class="k">${esc(p.kicker)}</span>
+      <div><h3><span>${esc(p.title)}</span></h3><p>${esc(p.summary)}</p></div>
+      <span class="m">${fmt(p.date)}, ${mins(p)} min read</span>
+    </a>`).join('') + `</div>`;
+}
+
+function line(p){
+  return `<a class="line" href="#/post/${p.slug}"><span class="k">${esc(p.kicker)}</span><span class="t">${esc(p.title)}</span></a>`;
+}
+
+function photoTile(e,i){
+  return `<button type="button" class="ph" data-i="${i}" aria-label="Open photo: ${esc(e.cap)}"><img src="${e.img}" alt="${esc(e.alt)}" loading="lazy"><span class="zoom" aria-hidden="true">+</span><span class="cap"><b>${esc(e.cap)}</b><span>${esc(e.sub)}</span></span></button>`;
+}
+function albumCols(){ return innerWidth < 720 ? 2 : 3; }
+const PHOTO_TAGS = [
+  {t:"All", label:"All photos", c:"#0C1530", fg:"#FFFFFF"},
+  {t:"Conferences", label:"Conferences", c:"#2036E8", fg:"#FFFFFF"},
+  {t:"Hackathons", label:"Hackathons", c:"#FF6B4A", fg:"#0C1530"},
+  {t:"Campus", label:"Campus", c:"#19C69B", fg:"#0C1530"}
+];
+function album(tag){
+  tag = tag || 'All';
+  const list = EVENTS.map((e,i) => ({e,i})).filter(x => tag === 'All' || x.e.tag === tag);
+  const n = Math.max(1, Math.min(albumCols(), list.length + 1));
+  const heights = Array(n).fill(0), cols = Array.from({length:n}, () => []);
+  list.forEach(x => { const c = heights.indexOf(Math.min(...heights)); cols[c].push(photoTile(x.e, x.i)); heights[c] += x.e.r; });
+  const c = heights.indexOf(Math.min(...heights));
+  cols[c].push(`<div class="panel"><h3>Hackathons, campuses and <em>conference floors.</em></h3><p>${list.length} ${list.length === 1 ? 'photo' : 'photos'}${tag === 'All' ? ' from the road' : ': ' + tag.toLowerCase()}.</p></div>`);
+  return cols.map(col => `<div class="acol">${col.join('')}</div>`).join('');
+}
+function spreadsHtml(){
+  return SPREADS.map((e,k) => `<article class="spread ${e.layout} ${e.span}" style="background:${e.bg};color:${e.fg};--sh:${e.sh}">
+    <button type="button" class="sp-img" data-i="${EVENTS.length + k}" aria-label="Open image: ${esc(e.title)}"><img src="${e.img}" alt="${esc(e.alt)}" loading="lazy"></button>
+    <div class="tx"><p class="kick">${esc(e.kicker)}</p><h3>${esc(e.title)}</h3><p>${esc(e.info)}</p>${e.quote ? `<p class="quote">${esc(e.quote)}</p>` : ''}
+    <div class="tags">${e.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>
+    ${e.story ? `<p><a class="go" href="#/post/${e.story}">Read the story</a></p>` : ''}
+    <p class="credit">${esc(e.credit)}</p></div></article>`).join('');
+}
+
+function home(){
+  const [a,b,c] = POSTS;
+  return `
+  <div class="stick" id="stick"><a class="mark" href="#/">${esc(SITE.short)}</a>${NAV}</div>
+  <header class="cover">
+    <div class="topbar"><span>${esc(SITE.issue)}</span>${NAV}</div>
+    <h1 class="masthead"><span>Mohammed </span><span>Zaid Waghoo</span></h1>
+    <img class="cutout" src="images/hero-cutout.webp" alt="Portrait of Mohammed Zaid Waghoo in a dark blazer and glasses, arms crossed">
+    <div class="lines l">
+      <p class="dek">Notes on building AI and the web, by ${esc(SITE.name)} in Mumbai.</p>
+      ${a?line(a):''}
+      ${POSTS[2]?line(POSTS[2]):''}
+    </div>
+    <div class="lines r">
+      ${b?line(b):''}
+      ${POSTS[3]?line(POSTS[3]):''}
+      <a class="line" href="#/photos"><span class="k">Photo story</span><span class="t">Out and about</span></a>
+    </div>
+    <div class="sticker" aria-hidden="true"><span><b>5&times;</b>hackathon winner</span></div>
+  </header>
+  <div class="ribbon" role="region" aria-label="Skills">
+    <div class="rtrack">${[0,1].map(k => `<div class="rset"${k ? ' aria-hidden="true"' : ''}>${[['AI automation & CRM','#2036E8'],['Software development','#FF6B4A'],['SEO','#0C1530'],['Software architecture','#2036E8'],['Web solutions','#FF6B4A'],['Digital transformation','#0C1530'],['Data analysis','#2036E8']].map(([t,c]) => `<span class="ri" style="--m:${c}">${esc(t)}</span>`).join('')}</div>`).join('')}</div>
+  </div>
+
+  <main>
+  <section class="block wrap" id="stories">
+    <h2 class="sec">In this issue</h2>
+    <p class="sec-lede">${POSTS.length} stories on AI, healthcare software, mobile games, hackathons and the projects behind them.</p>
+    ${tiles(POSTS)}
+  </section>
+
+  <section class="band sky" id="work"><div class="wrap block">
+    <h2 class="sec">The work</h2>
+    <p class="sec-lede">Ten projects across healthcare, hospitality, e-commerce, AI and mobile. Filter by area, and open any row for details.</p>
+    <div class="chips" role="group" aria-label="Filter projects">
+      ${['All','Healthcare','Hospitality','E-commerce','AI','Mobile'].map((c,i)=>`<button type="button" class="chip" data-cat="${c}" aria-pressed="${i===0}">${c}</button>`).join('')}
+    </div>
+    <div class="work">
+      ${PROJECTS.map(p => `<details data-cat="${p.cat}"><summary><h3>${esc(p.name)}</h3><span class="cat" style="--c:${CAT_COLORS[p.cat]||'#ddd'}">${esc(p.cat)}</span><span class="pm" aria-hidden="true">+</span></summary><div class="more-in"><p>${esc(p.text)}</p><p class="stack">${esc(p.stack)}</p>${p.story?`<a class="go" href="#/post/${p.story}">Read the story</a>`:''}</div></details>`).join('')}
+    </div>
+  </div></section>
+
+  <section class="block wrap" id="photos">
+    <div class="ph-head">
+      <div><h2 class="sec">Out and about</h2>
+      <p class="sec-lede">A photo story from conference floors, campuses and hackathons. Pick a kind, then tap any photo to view it larger.</p></div>
+      <div class="filters" role="group" aria-label="Filter photos">
+        ${PHOTO_TAGS.map((f,i) => `<button type="button" class="flt" data-t="${f.t}" aria-pressed="${i===0}" style="--c:${f.c};--t:${f.fg}"><b>${f.t==='All' ? EVENTS.length : EVENTS.filter(e => e.tag===f.t).length}</b><span>${f.label}</span></button>`).join('')}
+      </div>
+    </div>
+    <div class="album" data-cols="${albumCols()}" data-tag="All">
+      ${album()}
+    </div>
+  </section>
+
+  <section class="band blush" id="stage"><div class="wrap block">
+    <h2 class="sec">Stage &amp; spotlight</h2>
+    <p class="sec-lede">Two slides from my Viksit Bharat @2047 talk, and two portraits from the India Rising esports event.</p>
+    <div class="spreads">${spreadsHtml()}</div>
+  </div></section>
+
+  <section class="band lemon" id="about"><div class="wrap block">
+    <div class="about">
+      <aside class="about-side">
+        <img class="arch" src="images/hero.jpg" alt="Mohammed Zaid Waghoo" loading="lazy">
+        <div class="fact now"><span class="fk">Right now</span><b>Director of Technology &amp; Digital Transformation</b><span class="ln">NM Aesthetics, Mumbai</span><span class="ln">Plus freelance AI-dev and CRM projects</span></div>
+        <div class="fact nums"><div><span class="n">${PROJECTS.length}</span><small>projects</small></div><div><span class="n">${ACHIEVEMENTS.filter(a => a.type !== 'Hackathons').length}</span><small>certificates</small></div><div><span class="n">${POSTS.length}</span><small>stories</small></div></div>
+        <div class="fact skills"><span class="fk">Toolbox</span><div class="tags">${['Python','React','Next.js','Node.js','FastAPI','MongoDB','TypeScript','React Native','Tailwind CSS','SEO','Data analysis','Digital transformation'].map(t => `<span>${esc(t)}</span>`).join('')}</div></div>
+      </aside>
+      <div>
+        <h2 class="sec">About the writer</h2>
+        <p>I am a software developer with a background in computer engineering and hands-on experience in software design, architecture and web solutions. Lately most of my work is AI automation and CRM systems, plus the SEO and content work that helps them get used. I freelance as an AI-dev engineer and CRM specialist across healthcare, hospitality and e-commerce.</p>
+        <p>I have won five hackathons, and I enjoy the part of a project where an idea becomes something a real team uses every day. Right now I lead technology and digital transformation at NM Aesthetics in Mumbai, and I take on freelance AI and web projects alongside.</p>
+        <ol class="timeline" aria-label="Career timeline">
+          ${TIMELINE.map(t => `<li><span class="when">${esc(t.when)}</span><span class="what">${esc(t.what)}</span><span class="where">${esc(t.where)}</span></li>`).join('')}
+        </ol>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="contact" id="contact"><div class="wrap contact-wrap">
+    <h2 class="sec">Write to the editor</h2>
+    <p class="sec-lede">Questions, corrections, or a project in mind. I read everything.</p>
+    <div class="links">${SITE.links.map(l => `<a href="${l.url}" ${l.url.startsWith('http')?'target="_blank" rel="noopener"':''}>${esc(l.label)}<small>${esc(l.note)}</small></a>`).join('')}</div>
+    <p class="wordmark" aria-hidden="true">Thanks for reading.</p>
+  </div></section>
+  </main>
+  <footer class="foot wrap">${esc(SITE.issue)}. Written in Mumbai by ${esc(SITE.name)}. &copy; ${new Date().getFullYear()}</footer>`;
+}
+
+function postPage(slug){
+  const i = POSTS.findIndex(p => p.slug === slug);
+  if(i < 0) return notFound();
+  const p = POSTS[i];
+  const others = [POSTS[(i+1)%POSTS.length], POSTS[(i+2)%POSTS.length]];
+  document.title = p.title + ' | ' + SITE.short;
+  return `
+  <header class="post-head" style="background:${p.bg};color:${p.fg}">
+    <div class="topbar"><a href="#/" style="font-weight:800">${esc(SITE.short)}</a><a href="#/stories">All stories</a></div>
+    <div class="in">
+      <p class="k">${esc(p.kicker)}</p>
+      <h1>${esc(p.title)}</h1>
+      <p class="byline"><span>By ${esc(SITE.name)}</span><span>${fmt(p.date)}</span><span>${mins(p)} min read</span><button type="button" class="copy" id="copylink">Copy link</button></p>
+    </div>
+  </header>
+  <article class="prose">${p.body}</article>
+  <section class="more"><h2>Keep reading</h2>${tiles(others)}</section>
+  <footer class="foot wrap">${esc(SITE.issue)}. Written in Mumbai by ${esc(SITE.name)}.</footer>`;
+}
+
+function notFound(){
+  return `<div class="prose"><h2>Page not found</h2><p>That story does not exist. <a href="#/">Back to the cover</a>.</p></div>`;
+}
+
+/* ---------- interactive pieces ---------- */
+function enhance(){
+
+  // ---------- article widgets ----------
+  const W = {
+    blood(el){
+      const groups = ['O-','O+','A-','A+','B-','B+','AB-','AB+'];
+      const ag = g => g.replace(/[+-]/,'').replace('O','').split('');
+      const canGive = (d, r) => ag(d).every(x => ag(r).includes(x)) && (d.endsWith('-') || r.endsWith('+'));
+      el.innerHTML = `<div class="tool"><h3>Who can this patient receive from?</h3><p class="sub">Pick a patient's blood group. Compatible red cell donors light up.</p>
+        <div class="chips" role="group" aria-label="Patient blood group">${groups.map((g,i)=>`<button type="button" class="chip" data-g="${g}" aria-pressed="false">${g.replace('-','&minus;')}</button>`).join('')}</div>
+        <div class="donors" aria-hidden="true">${groups.map(g=>`<div class="donor" data-d="${g}">${g.replace('-','&minus;')}</div>`).join('')}</div>
+        <p class="res" aria-live="polite">Choose a group above.</p></div>`;
+      const out = el.querySelector('.res');
+      el.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => {
+        el.querySelectorAll('.chip').forEach(x => x.setAttribute('aria-pressed', x === b));
+        const r = b.dataset.g;
+        const ok = groups.filter(d => canGive(d, r));
+        el.querySelectorAll('.donor').forEach(d => d.classList.toggle('yes', ok.includes(d.dataset.d)));
+        const f = g => g.replace('-','\u2212');
+        out.textContent = f(r) + ' patients can receive red cells from ' + ok.map(f).join(', ') + '.';
+      }));
+    },
+    checks(el){
+      el.innerHTML = `<div class="tool"><h3>How was each game checked?</h3><p class="sub">Pick a game.</p>
+        <div class="chips" role="group" aria-label="Game">${CHECKS.map((c,i)=>`<button type="button" class="chip" data-i="${i}" aria-pressed="${i===0}">${esc(c.game)}</button>`).join('')}</div>
+        <p class="res" aria-live="polite"></p></div>`;
+      const out = el.querySelector('.res');
+      const show = i => { const c = CHECKS[i]; out.innerHTML = `<span class="big">${esc(c.stat)}</span><b>${esc(c.label)}.</b> ${esc(c.text)}`; };
+      show(0);
+      el.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => {
+        el.querySelectorAll('.chip').forEach(x => x.setAttribute('aria-pressed', x === b));
+        show(Number(b.dataset.i));
+      }));
+    },
+    achievements(el){
+      const cats = ['All','Hackathons','Data','AI and marketing','Engineering'];
+      const list = ACHIEVEMENTS.slice().sort((a,b) => b.sort - a.sort);
+      el.innerHTML = `<div class="tool"><h3>Hackathons and certificates</h3><p class="sub">Filter by thread.</p>
+        <div class="chips" role="group" aria-label="Filter achievements">${cats.map((c,i)=>`<button type="button" class="chip" data-c="${c}" aria-pressed="${i===0}">${c}</button>`).join('')}</div>
+        <ul class="ach"></ul></div>`;
+      const ul = el.querySelector('.ach');
+      const draw = c => { ul.innerHTML = list.filter(a => c === 'All' || a.type === c).map(a =>
+        `<li><span class="yr">${a.year}</span><div><b>${esc(a.title)}${a.url?`<a href="${a.url}" target="_blank" rel="noopener">Verify</a>`:''}</b><small>${esc(a.org)}</small></div><span class="r">${esc(a.res)}</span></li>`).join(''); };
+      draw('All');
+      el.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => {
+        el.querySelectorAll('.chip').forEach(x => x.setAttribute('aria-pressed', x === b));
+        draw(b.dataset.c);
+      }));
+    }
+  };
+  document.querySelectorAll('[data-widget]').forEach(el => { const f = W[el.dataset.widget]; if(f) f(el); });
+
+  // ---------- project filter ----------
+  document.querySelectorAll('.chips[aria-label="Filter projects"] .chip').forEach(b => b.addEventListener('click', () => {
+    const c = b.dataset.cat;
+    document.querySelectorAll('.chips[aria-label="Filter projects"] .chip').forEach(x => x.setAttribute('aria-pressed', x === b));
+    document.querySelectorAll('.work details').forEach(d => { d.hidden = !(c === 'All' || d.dataset.cat === c); });
+  }));
+
+  // photo filter
+  document.querySelectorAll('.flt').forEach(b => b.addEventListener('click', () => {
+    const a = document.querySelector('.album'); if(!a) return;
+    a.dataset.tag = b.dataset.t; a.innerHTML = album(b.dataset.t);
+    document.querySelectorAll('.flt').forEach(x => x.setAttribute('aria-pressed', x === b));
+  }));
+
+  // copy link
+  const cl = document.getElementById('copylink');
+  if(cl) cl.addEventListener('click', async () => {
+    try{ await navigator.clipboard.writeText(location.href); cl.textContent = 'Link copied'; }
+    catch(e){ cl.textContent = 'Copy from the address bar'; }
+    setTimeout(() => cl.textContent = 'Copy link', 2200);
+  });
+
+  // photo album lightbox
+  const grid = document.querySelector('.album');
+  if(grid){
+    const tilesAll = document.querySelectorAll('.album .ph, .spreads .sp-img');
+    let cur = 0, opener = null, box = null;
+    const show = n => {
+      cur = (n + ALL_PHOTOS.length) % ALL_PHOTOS.length;
+      const e = ALL_PHOTOS[cur];
+      box.querySelector('.lb-img').src = e.img;
+      box.querySelector('.lb-img').alt = e.alt;
+      box.querySelector('.lb-cap b').textContent = e.cap;
+      box.querySelector('.lb-cap span').textContent = e.sub;
+      const inf = box.querySelector('.lb-info'); inf.textContent = e.info || ''; inf.hidden = !e.info;
+      const go = box.querySelector('.lb-go'); go.hidden = !e.story; if(e.story) go.href = '#/post/' + e.story;
+      box.querySelector('.lb-count').textContent = 'Photo ' + (cur + 1) + ' of ' + ALL_PHOTOS.length;
+    };
+    const close = () => { if(!box) return; box.remove(); box = null; document.body.style.overflow = ''; document.removeEventListener('keydown', onKey); if(opener) opener.focus(); };
+    const onKey = ev => {
+      if(ev.key === 'Escape') close();
+      else if(ev.key === 'ArrowRight') show(cur + 1);
+      else if(ev.key === 'ArrowLeft') show(cur - 1);
+      else if(ev.key === 'Tab'){
+        const f = [...box.querySelectorAll('button')].filter(b => b.offsetParent);
+        const first = f[0], last = f[f.length - 1];
+        if(ev.shiftKey && document.activeElement === first){ ev.preventDefault(); last.focus(); }
+        else if(!ev.shiftKey && document.activeElement === last){ ev.preventDefault(); first.focus(); }
+      }
+    };
+    const open = (n, btn) => {
+      opener = btn;
+      box = document.createElement('div');
+      box.className = 'lb'; box.setAttribute('role','dialog'); box.setAttribute('aria-modal','true'); box.setAttribute('aria-label','Photo viewer');
+      box.innerHTML = `<div class="lb-top"><span class="lb-count"></span><button type="button" class="lb-close" aria-label="Close">&times;</button></div>
+        <div class="lb-stage"><button type="button" class="lb-prev" aria-label="Previous photo">&larr;</button><img class="lb-img" alt=""><button type="button" class="lb-next" aria-label="Next photo">&rarr;</button></div>
+        <div><div class="lb-cap"><b></b><span></span><p class="lb-info"></p><a class="lb-go" hidden>Read the story</a></div><div class="lb-nav-m"><button type="button" class="lb-prev" aria-label="Previous photo">&larr;</button><button type="button" class="lb-next" aria-label="Next photo">&rarr;</button></div></div>`;
+      document.body.appendChild(box);
+      document.body.style.overflow = 'hidden';
+      box.querySelector('.lb-close').addEventListener('click', close);
+      box.querySelectorAll('.lb-prev').forEach(b => b.addEventListener('click', () => show(cur - 1)));
+      box.querySelectorAll('.lb-next').forEach(b => b.addEventListener('click', () => show(cur + 1)));
+      box.addEventListener('click', ev => { if(ev.target === box || ev.target.classList.contains('lb-stage')) close(); });
+      document.addEventListener('keydown', onKey);
+      show(n);
+      box.querySelector('.lb-close').focus();
+    };
+    [grid, document.querySelector('.spreads')].forEach(c => c && c.addEventListener('click', ev => {
+      const b = ev.target.closest('.ph, .sp-img'); if(b) open(Number(b.dataset.i), b);
+    }));
+  }
+
+  // scrollytelling: the stage follows the step in view
+  const steps = [...document.querySelectorAll('.step')];
+  const items = [...document.querySelectorAll('.loop li')];
+  if(steps.length && items.length){
+    const setOn = n => items.forEach((li,i) => {
+      li.classList.toggle('on', i === n);
+      li.querySelector('button').setAttribute('aria-current', i === n ? 'step' : 'false');
+    });
+    const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) setOn(Number(e.target.dataset.i)); }),
+      {rootMargin:'-42% 0px -42% 0px'});
+    steps.forEach(s => io.observe(s));
+    items.forEach((li,i) => li.querySelector('button').addEventListener('click', () =>
+      steps[i].scrollIntoView({block:'center', behavior: reduce ? 'auto' : 'smooth'})));
+    setOn(0);
+  }
+
+  // clinic-site self check
+  document.querySelectorAll('[data-audit]').forEach(box => {
+    const out = box.querySelector('.out');
+    const boxes = [...box.querySelectorAll('input')];
+    const msgs = [
+      'Tick what your site already does.',
+      'A start. The unticked jobs are where enquiries are getting lost.',
+      'Halfway. Fix the follow-up step before adding anything new.',
+      'Nearly there. Fix the last unticked job first.',
+      'All four covered. Next, measure which one works hardest.'
+    ];
+    boxes.forEach(b => b.addEventListener('change', () => {
+      const n = boxes.filter(x => x.checked).length;
+      out.textContent = n === 0 ? msgs[0] : n + ' of 4. ' + msgs[n];
+    }));
+  });
+}
+
+// size the masthead so the name always fits the cover edge to edge
+function fitMasthead(){
+  const m = document.querySelector('.masthead');
+  if(!m) return;
+  m.style.fontSize = '100px';
+  const avail = m.parentElement.clientWidth - 2 * parseFloat(getComputedStyle(m.parentElement).paddingLeft);
+  const rg = document.createRange(); rg.selectNodeContents(m);
+  const tw = Math.max(1, rg.getBoundingClientRect().width);
+  const size = Math.min(100 * avail * .985 / tw, innerWidth > 960 ? 264 : 170);
+  m.style.fontSize = size + 'px';
+}
+addEventListener('resize', () => {
+  fitMasthead();
+  const a = document.querySelector('.album');
+  if(a && String(albumCols()) !== a.dataset.cols){ a.dataset.cols = albumCols(); a.innerHTML = album(a.dataset.tag); }
+});
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitMasthead);
+
+// reading progress bar
+const bar = document.getElementById('prog');
+let ticking = false;
+function onScroll(){
+  if(ticking) return; ticking = true;
+  requestAnimationFrame(() => {
+    ticking = false;
+    const st = document.getElementById('stick');
+    if(st) st.classList.toggle('on', scrollY > innerHeight * .85);
+    const m = document.querySelector('.masthead'), c = document.querySelector('.cutout');
+    if(m && c && !reduce && innerWidth > 960){
+      const y = Math.min(scrollY, 900);
+      m.style.transform = 'translate3d(0,' + (y * .16) + 'px,0)';
+      c.style.transform = 'translate3d(-50%,' + (-y * .04) + 'px,0)';
+    }
+    progress();
+  });
+}
+function progress(){
+  const a = document.querySelector('.prose');
+  if(!a){ bar.style.transform = 'scaleX(0)'; return; }
+  const r = a.getBoundingClientRect();
+  const total = Math.max(1, a.offsetHeight - innerHeight * .5);
+  bar.style.transform = 'scaleX(' + Math.min(1, Math.max(0, -r.top / total)) + ')';
+}
+addEventListener('scroll', onScroll, {passive:true});
+
+function route(){
+  document.querySelectorAll('.lb').forEach(n => n.remove()); document.body.style.overflow = '';
+  const h = location.hash.replace(/^#\/?/, '');
+  const [a, b] = h.split('/');
+  document.title = SITE.short + ' | Notes on building AI and the web';
+  if(a === 'post'){
+    $app.innerHTML = postPage(b);
+    scrollTo(0,0);
+  } else {
+    $app.innerHTML = home();
+    const map = {stage:'stage', stories:'stories', writing:'stories', work:'work', projects:'work', photos:'photos', events:'photos', about:'about', contact:'contact', elsewhere:'contact'};
+    const el = map[a] && document.getElementById(map[a]);
+    if(el) el.scrollIntoView(); else scrollTo(0,0);
+  }
+  enhance();
+  fitMasthead();
+  progress();
+}
+addEventListener('hashchange', route);
+document.addEventListener('click', e => {
+  const a = e.target.closest && e.target.closest('a[href^="#/"]');
+  if(a && a.getAttribute('href') === location.hash) { e.preventDefault(); route(); }
+});
+route();
+</script>
+</body>
+</html>
